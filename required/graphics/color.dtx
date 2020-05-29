@@ -19,7 +19,7 @@
 %<driver> \ProvidesFile{color.drv}
 % \fi
 %         \ProvidesFile{color.dtx}
-          [2020/02/24 v1.2b Standard LaTeX Color (DPC)]
+          [2020/05/24 v1.2c Standard LaTeX Color (DPC)]
 %
 % \iffalse
 %<*driver>
@@ -539,6 +539,8 @@
 %     {Give info about redefinitions}
 % \changes{v1.2a}{2019/11/23}
 %      {Add \cs{protected} gh/208}
+% \changes{v1.2c}{2020/05/29}
+%      {Add support for \pkg{l3color}}
 %    \begin{macrocode}
 \protected\def\definecolor#1#2#3{%
   \@ifundefined{color@#2}%
@@ -546,7 +548,11 @@
     {\@ifundefined{\string\color @#1}{}%
       {\PackageInfo{color}{Redefining color #1}}%
      \csname color@#2\expandafter\endcsname
-         \csname\string\color @#1\endcsname{#3}}}
+         \csname\string\color @#1\endcsname{#3}}%
+    \ifcsname\detokenize{color_set:nnn}\endcsname
+      \csname\detokenize{color_set:nnn}\endcsname{#1}{#2}{#3}%
+    \fi
+  }
 %    \end{macrocode}
 %  \end{macro}
 %
@@ -560,6 +566,8 @@
 %     {Give info about redefinitions}
 % \changes{v1.2b}{2020/02/24}
 %     {corrected test, see https://www.latex-project.org/cgi-bin/ltxbugs2html?pr=graphics/3635}
+% \changes{v1.2c}{2020/05/29}
+%      {Add support for \pkg{l3color}}
 %
 % Driver files may opt to define a `named' colour model.
 % Placing colour names rather than numeric specifications into the dvi
@@ -608,6 +616,9 @@
       {\@ifundefined{col@#2}{}%
         {\PackageInfo{color}{Redefining color #2 in named color model}}%
       \csname color@#3\endcsname\@tempa{#4}%
+    \ifcsname\detokenize{color_set:nnn}\endcsname
+      \csname\detokenize{color_set:nnn}\endcsname{#1}{#2}{#3}%
+    \fi
       \csname define@color@#1\endcsname{#2}\@tempa
       \c@lor@usename{#2}}}}
 \@onlypreamble\DefineNamedColor
